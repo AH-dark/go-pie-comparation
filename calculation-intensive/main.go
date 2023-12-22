@@ -3,11 +3,12 @@ package main
 import (
 	"fmt"
 	"math"
-	"os"
 	"sync"
 )
 
-func compute(start, end int, wg *sync.WaitGroup) {
+var wg = sync.WaitGroup{}
+
+func compute(start, end int) {
 	defer wg.Done()
 	var result float64
 	for i := start; i < end; i++ {
@@ -16,31 +17,30 @@ func compute(start, end int, wg *sync.WaitGroup) {
 	}
 }
 
-func main() {
+func doCompute() {
 	const numWorkers = 4
 	const numElements = 25000000
-	wg := sync.WaitGroup{}
 
 	// 并发数学计算
 	for i := 0; i < numWorkers; i++ {
 		wg.Add(1)
-		go compute(i*numElements/numWorkers, (i+1)*numElements/numWorkers, &wg)
+		go compute(i*numElements/numWorkers, (i+1)*numElements/numWorkers)
 	}
+}
 
+func writeMemory() {
 	// 内存操作
 	data := make(map[int]int)
 	for i := 0; i < 10000000; i++ {
 		data[i] = i ^ 0xff00
 	}
+}
 
-	// 文件I/O
-	file, err := os.CreateTemp("", "go-pie-test-*.txt")
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-	file.WriteString("Test data")
+func main() {
+	doCompute()
+	writeMemory()
 
 	wg.Wait()
+
 	fmt.Println("Test completed")
 }

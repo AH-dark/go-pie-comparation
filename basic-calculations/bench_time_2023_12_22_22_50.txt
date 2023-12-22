@@ -1,0 +1,9 @@
+Benchmarking time for non-PIE executable
+plus: 8
+multiply: 15
+0.53 real         0.00 user         0.00 sys
+
+Benchmarking time for PIE executable
+plus: 8
+multiply: 15
+0.29 real         0.00 user         0.00 sys

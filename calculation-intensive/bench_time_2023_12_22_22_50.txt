@@ -1,0 +1,7 @@
+Benchmarking time for non-PIE executable
+Test completed
+1.56 real         1.33 user         0.07 sys
+
+Benchmarking time for PIE executable
+Test completed
+1.40 real         1.33 user         0.07 sys
