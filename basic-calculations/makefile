@@ -25,15 +25,15 @@ bench_time: build
 
 bench_mem: build
 	@echo "Benchmarking memory for non-PIE executable"
-	@$(VALGRIND) --tool=massif --stacks=yes $(NON_PIE_EXECUTABLE)
+	@-$(VALGRIND) --tool=massif --stacks=yes $(NON_PIE_EXECUTABLE) > $(NON_PIE_EXECUTABLE).valgrind.txt
 
 	@echo "Benchmarking memory for PIE executable"
-	@$(VALGRIND) --tool=massif --stacks=yes $(PIE_EXECUTABLE)
+	@-$(VALGRIND) --tool=massif --stacks=yes $(PIE_EXECUTABLE) > $(PIE_EXECUTABLE).valgrind.txt
 
 objdump: build
 	@$(GO) tool objdump $(NON_PIE_EXECUTABLE) > $(NON_PIE_EXECUTABLE).objdump
 	@$(GO) tool objdump $(PIE_EXECUTABLE) > $(PIE_EXECUTABLE).objdump
-	@-$(DIFF) $(NON_PIE_EXECUTABLE).objdump $(PIE_EXECUTABLE).objdump
+	@-$(DIFF) $(NON_PIE_EXECUTABLE).objdump $(PIE_EXECUTABLE).objdump > objdump.diff
 
 clean:
 	@rm -f $(NON_PIE_EXECUTABLE) $(PIE_EXECUTABLE) $(NON_PIE_EXECUTABLE).objdump $(PIE_EXECUTABLE).objdump
